@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets';
+
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import themeAmethyst from '../../assets/screenshots/theme-amethyst.png';
+import themeDay from '../../assets/screenshots/theme-day.png';
+import themeMidnight from '../../assets/screenshots/theme-midnight.png';
+import themeStone from '../../assets/screenshots/theme-stone.png';
+import themeTerracotta from '../../assets/screenshots/theme-terracotta.png';
+import { ANDROID_APK_URL, APP_URL } from '../../constants/links';
+import type { Locale } from '../../constants/i18n';
+import { useTranslations } from '../../utils/i18n-text';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const mosaic = [themeMidnight, themeDay, themeTerracotta, themeAmethyst, themeStone];
+
+const points = [t('download_point_signup'), t('download_point_ads'), t('download_point_local')];
+---
+
+<section class="download" id="download">
+  <div class="download__mosaic" aria-hidden="true">
+    {
+      mosaic.map(screen => (
+        <div class="download__screen">
+          <Image src={screen} alt="" widths={[160, 240, 320]} sizes="200px" loading="lazy" />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="container download__inner">
+    <header class="section__head" data-reveal>
+      <p class="eyebrow">{t('download_eyebrow')}</p>
+      <h2 class="title">{t('download_title')}</h2>
+      <p class="lead">{t('download_lead')}</p>
+    </header>
+
+    <ul class="options">
+      <li class="option" data-reveal>
+        <span class="option__icon">
+          <Icon name="monitor" size={22} />
+        </span>
+        <h3 class="option__title">{t('download_web_title')}</h3>
+        <p class="option__text">{t('download_web_text')}</p>
+        <Button href={APP_URL} target="_blank" rel="noopener" size="l">
+          <Icon slot="icon" name="arrow-right" size={20} />
+          {t('download_web_cta')}
+        </Button>
+      </li>
+
+      <li class="option" data-reveal style="--reveal-delay: 120ms">
+        <span class="option__icon option__icon--warning">
+          <Icon name="smartphone" size={22} />
+        </span>
+        <h3 class="option__title">{t('download_android_title')}</h3>
+        <p class="option__text">{t('download_android_text')}</p>
+        <Button href={ANDROID_APK_URL} download size="l" variant="warning">
+          <Icon slot="icon" name="download" size={20} />
+          {t('download_android_cta')}
+        </Button>
+        <p class="option__note">{t('download_android_note')}</p>
+      </li>
+    </ul>
+
+    <ul class="points" data-reveal style="--reveal-delay: 160ms">
+      {
+        points.map(point => (
+          <li class="point">
+            <Icon name="check" size={16} />
+            <span>{point}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .download {
+    position: relative;
+    overflow: hidden;
+    padding-block: calc(var(--section-gap) + 20px);
+    background: linear-gradient(180deg, rgba(71, 99, 240, 0.22), rgba(5, 5, 5, 1) 60%);
+  }
+
+  .download__mosaic {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.75;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 80%);
+    pointer-events: none;
+  }
+
+  .download::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.9) 0%,
+      rgba(5, 5, 5, 0.62) 25%,
+      rgba(5, 5, 5, 0.62) 70%,
+      rgba(5, 5, 5, 0.95) 100%
+    );
+    pointer-events: none;
+  }
+
+  .download__screen {
+    flex: none;
+    width: 232px;
+    padding: 6px;
+    border-radius: 28px;
+    background: rgba(246, 247, 255, 0.1);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+
+  .download__screen :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: 22px;
+  }
+
+  .download__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .options {
+    display: grid;
+    gap: 20px;
+    max-width: 920px;
+    margin: clamp(40px, 5vw, 64px) auto 0;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: rgba(15, 15, 17, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .option__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-m);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+  }
+
+  .option__icon--warning {
+    background: rgba(255, 204, 74, 0.15);
+    color: var(--warning);
+  }
+
+  .option__title {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .option__text {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .option :global(.btn) {
+    margin-top: 8px;
+  }
+
+  .option__note {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    justify-content: center;
+    margin-top: 40px;
+    color: var(--text-secondary);
+    font-size: 15px;
+  }
+
+  .point {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .point :global(svg) {
+    color: var(--positive);
+  }
+
+  @media (max-width: 900px) {
+    .download__screen {
+      width: 150px;
+    }
+  }
+</style>

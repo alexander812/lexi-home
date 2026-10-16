@@ -1,0 +1,97 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'warning';
+  size?: 'm' | 'l';
+  target?: string;
+  rel?: string;
+  download?: string | boolean;
+  icon?: string;
+  class?: string;
+}
+
+const { href, variant = 'primary', size = 'm', target, rel, download, class: className } = Astro.props;
+
+const classes = ['btn', `btn--${variant}`, `btn--${size}`, className].filter(Boolean).join(' ');
+---
+
+<a class={classes} href={href} target={target} rel={rel} download={download}>
+  <slot name="icon" />
+  <slot />
+  <slot name="trailing" />
+</a>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out),
+      border-color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+
+  .btn--m {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+
+  .btn--l {
+    padding: 16px 30px;
+    font-size: 17px;
+  }
+
+  .btn--primary {
+    background: var(--accent);
+    color: var(--accent-over);
+  }
+
+  .btn--primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn--primary:active {
+    background: var(--accent-active);
+    transform: translateY(0);
+  }
+
+  .btn--secondary {
+    border-color: var(--border);
+    background: var(--control-bg);
+    color: var(--text);
+  }
+
+  .btn--secondary:hover {
+    background: var(--control-bg-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn--secondary:active {
+    transform: translateY(0);
+  }
+
+  .btn--warning {
+    background: var(--warning);
+    color: var(--warning-over);
+  }
+
+  .btn--warning:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn:hover,
+    .btn:active {
+      transform: none;
+    }
+  }
+</style>

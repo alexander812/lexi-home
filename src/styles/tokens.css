@@ -1,0 +1,55 @@
+:root {
+  color-scheme: dark;
+
+  /* Surfaces (ui-kit "dark" theme) */
+  --canvas: #050505;
+  --surface-1: #0f0f11;
+  --surface-2: #18181a;
+  --surface-3: #282a2e;
+
+  /* Accent */
+  --accent: #4763f0;
+  --accent-hover: #5578f1;
+  --accent-active: #3c4ce2;
+  --accent-soft: rgba(71, 99, 240, 0.15);
+  --accent-over: #ffffff;
+
+  /* Status */
+  --warning: #ffcc4a;
+  --warning-over: #000000;
+  --negative: #f14f5d;
+  --positive: #00b97a;
+
+  /* Text */
+  --text: rgba(246, 247, 255, 1);
+  --text-secondary: rgba(246, 247, 255, 0.5);
+  --text-tertiary: rgba(246, 247, 255, 0.32);
+
+  /* Controls */
+  --card-bg: rgba(246, 247, 255, 0.05);
+  --card-bg-hover: rgba(246, 247, 255, 0.08);
+  --control-bg: rgba(246, 247, 255, 0.08);
+  --control-bg-hover: rgba(246, 247, 255, 0.14);
+  --border: rgba(246, 247, 255, 0.1);
+  --border-soft: rgba(246, 247, 255, 0.06);
+
+  /* Corners */
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Type */
+  --font-main: 'Inter Variable', 'Inter Display', system-ui, -apple-system, sans-serif;
+
+  /* Layout */
+  --container: 1280px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-height: 72px;
+  --section-gap: clamp(80px, 9vw, 140px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --reveal-shift: 28px;
+}

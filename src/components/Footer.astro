@@ -1,0 +1,159 @@
+---
+import { ANDROID_APK_URL, APP_URL } from '../constants/links';
+import type { Locale } from '../constants/i18n';
+import { localePath, useTranslations } from '../utils/i18n-text';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const appLinks = [
+  { href: APP_URL, label: t('footer_web'), external: true },
+  { href: ANDROID_APK_URL, label: t('footer_android'), download: true },
+  { href: '#videos', label: t('footer_videos') },
+  { href: '#download', label: t('footer_download') },
+];
+
+const languageLinks = [
+  { href: localePath('en'), label: 'English', active: locale === 'en' },
+  { href: localePath('ru'), label: 'Русский', active: locale === 'ru' },
+];
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <div class="footer__logo">
+        <img class="footer__emblem" src="/emblem.svg" alt="" width="372" height="339" />
+        <span class="footer__wordmark">Lexi</span>
+      </div>
+      <p class="footer__tagline">{t('footer_tagline')}</p>
+    </div>
+
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3 class="footer__col-title">{t('footer_app_title')}</h3>
+        {
+          appLinks.map(link => (
+            <a
+              class="footer__link"
+              href={link.href}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener' : undefined}
+              download={link.download ? true : undefined}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="footer__col">
+        <h3 class="footer__col-title">{t('footer_lang_title')}</h3>
+        {
+          languageLinks.map(link => (
+            <a class="footer__link" href={link.href} aria-current={link.active ? 'true' : undefined}>
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <span>© {new Date().getFullYear()} Lexi</span>
+    <span>{t('footer_note')}</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 64px 32px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 320px;
+  }
+
+  .footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer__emblem {
+    width: auto;
+    height: 32px;
+  }
+
+  .footer__wordmark {
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .footer__tagline {
+    color: var(--text-secondary);
+    font-size: 15px;
+  }
+
+  .footer__cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 72px;
+  }
+
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer__col-title {
+    color: var(--text-tertiary);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .footer__link {
+    color: var(--text-secondary);
+    font-size: 15px;
+    transition: color 0.2s var(--ease-out);
+  }
+
+  .footer__link:hover {
+    color: var(--text);
+  }
+
+  .footer__link[aria-current='true'] {
+    color: var(--text);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    justify-content: space-between;
+    margin-top: 56px;
+    color: var(--text-tertiary);
+    font-size: 13px;
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CoursesSection from '../../components/home/CoursesSection.astro';
+import DownloadSection from '../../components/home/DownloadSection.astro';
+import HeroSection from '../../components/home/HeroSection.astro';
+import TasksSection from '../../components/home/TasksSection.astro';
+import VideosSection from '../../components/home/VideosSection.astro';
+import { getLocaleFromPath } from '../../utils/i18n-text';
+import { getStaticPaths } from '../../utils/i18n-routes';
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+
+export { getStaticPaths };
+---
+
+<BaseLayout locale={locale}>
+  <HeroSection locale={locale} />
+  <CoursesSection locale={locale} />
+  <TasksSection locale={locale} />
+  <VideosSection locale={locale} />
+  <DownloadSection locale={locale} />
+</BaseLayout>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="372" height="339" viewBox="70.1 39.79 371.8 338.64">
+  <defs>
+    <clipPath id="left">
+      <path d="M253 72
+        C235 34 191 30 178 58
+        C150 40 106 70 106 128
+        C64 150 60 196 88 226
+        C66 260 78 306 116 318
+        C136 358 176 382 210 378
+        C232 376 244 366 250 350
+        Z" />
+    </clipPath>
+    <clipPath id="right">
+      <path d="M259 72
+        C277 34 321 30 334 58
+        C362 40 406 70 406 128
+        C448 150 452 196 424 226
+        C446 260 434 306 396 318
+        C376 358 336 382 302 378
+        C280 376 268 366 262 350
+        Z" />
+    </clipPath>
+  </defs>
+  <path fill="#f14f5d" clip-path="url(#left)" d="M0 0H512V512H0Z" />
+  <path fill="#ffcc4a" clip-path="url(#right)" d="M0 0H512V512H0Z" />
+  <path fill="#ffffff" transform="translate(102.37 297.00) scale(0.21186 -0.21186)" d="M377 0L348 129L189 129L160 0L0 0L172 708L373 708L544 0ZM271 554L267 554L207 253L328 253Z" />
+  <g transform="translate(276 140) scale(1.4 1.7)" fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M57 9 L51 21" />
+    <path d="M16 34 H84" />
+    <path d="M54 36 L16 90" />
+    <path d="M44 32 L86 90" />
+  </g>
+</svg>

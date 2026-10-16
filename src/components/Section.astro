@@ -1,0 +1,48 @@
+---
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  class?: string;
+}
+
+const { id, eyebrow, title, lead, ctaLabel, ctaHref, class: className } = Astro.props;
+
+const classes = ['section', className].filter(Boolean).join(' ');
+const hasHead = Boolean(eyebrow || title || lead);
+---
+
+<section class={classes} id={id}>
+  <div class="container">
+    {
+      hasHead && (
+        <header class="section__head" data-reveal>
+          {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+          {title && <h2 class="title">{title}</h2>}
+          {lead && <p class="lead">{lead}</p>}
+        </header>
+      )
+    }
+
+    <slot />
+  </div>
+
+  {
+    ctaHref && ctaLabel && (
+      <div class="container">
+        <div class="section__cta" data-reveal>
+          <Button href={ctaHref} variant="secondary" size="l">
+            <Icon slot="icon" name="download" size={18} />
+            {ctaLabel}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+</section>

@@ -1,0 +1,76 @@
+---
+import '@fontsource-variable/inter';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import type { Locale } from '../constants/i18n';
+import { hreflangMap, localePath, locales, useTranslations } from '../utils/i18n-text';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+}
+
+const { locale, title, description } = Astro.props;
+
+const t = useTranslations(locale);
+const pageTitle = title ?? t('meta_title');
+const pageDescription = description ?? t('meta_description');
+
+const site = Astro.site ?? new URL('https://lexi.casa');
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL('/icons/icon-512.png', site).href;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+
+    {
+      locales.map(loc => (
+        <link rel="alternate" hreflang={hreflangMap[loc]} href={new URL(localePath(loc), site).href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL('/', site).href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Lexi" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale === 'ru' ? 'ru_RU' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#050505" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <script is:inline>
+      document.documentElement.classList.add('has-js');
+    </script>
+
+    <slot name="head" />
+  </head>
+
+  <body>
+    <Header locale={locale} />
+    <main>
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <script>
+      import '../scripts/scroll-effects';
+    </script>
+  </body>
+</html>

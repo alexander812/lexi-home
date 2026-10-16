@@ -1,0 +1,216 @@
+---
+import { Image } from 'astro:assets';
+
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import cardScreen from '../../assets/screenshots/card.png';
+import coursesScreen from '../../assets/screenshots/courses.png';
+import progressScreen from '../../assets/screenshots/progress.png';
+import type { Locale } from '../../constants/i18n';
+import { useTranslations } from '../../utils/i18n-text';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const chips = [
+  { icon: 'mic' as const, label: t('hero_chip_voice') },
+  { icon: 'book-open' as const, label: t('hero_chip_courses') },
+  { icon: 'palette' as const, label: t('hero_chip_themes') },
+];
+
+const screenSizes = '(max-width: 900px) 45vw, 320px';
+const screenWidths = [240, 360, 480, 640];
+---
+
+<section class="hero" id="why">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <p class="eyebrow" data-reveal>{t('hero_badge')}</p>
+
+      <h1 class="hero__title" data-reveal style="--reveal-delay: 80ms">{t('hero_title')}</h1>
+
+      <p class="hero__lead" data-reveal style="--reveal-delay: 160ms">{t('hero_lead')}</p>
+
+      <div class="hero__actions" data-reveal style="--reveal-delay: 240ms">
+        <Button href="#download" size="l">
+          <Icon slot="icon" name="download" size={20} />
+          {t('hero_cta_primary')}
+        </Button>
+
+        <Button href="#videos" variant="secondary" size="l">
+          <Icon slot="icon" name="play" size={16} />
+          {t('hero_cta_secondary')}
+        </Button>
+      </div>
+
+      <ul class="hero__chips" data-reveal style="--reveal-delay: 320ms">
+        {
+          chips.map(chip => (
+            <li class="hero__chip">
+              <Icon name={chip.icon} size={18} />
+              <span>{chip.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="hero__art" data-reveal style="--reveal-delay: 200ms">
+      <div class="media-frame hero__phone hero__phone--left">
+        <Image
+          src={coursesScreen}
+          alt={t('alt_courses')}
+          widths={screenWidths}
+          sizes={screenSizes}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+
+      <div class="media-frame hero__phone hero__phone--main">
+        <Image
+          src={cardScreen}
+          alt={t('alt_card')}
+          widths={screenWidths}
+          sizes={screenSizes}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+
+      <div class="media-frame hero__phone hero__phone--right">
+        <Image src={progressScreen} alt={t('alt_progress')} widths={screenWidths} sizes={screenSizes} loading="eager" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(120px, 16vh, 200px);
+    padding-bottom: var(--section-gap);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    width: min(1100px, 120vw);
+    height: min(1100px, 120vw);
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(71, 99, 240, 0.22), transparent 62%);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    gap: clamp(48px, 5vw, 72px);
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero__title {
+    margin-top: 22px;
+    font-size: clamp(40px, 6.4vw, 88px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .hero__lead {
+    max-width: 560px;
+    margin-top: 24px;
+    color: var(--text-secondary);
+    font-size: clamp(16px, 1.35vw, 21px);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 32px;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .hero__chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero__chip :global(svg) {
+    color: var(--accent-hover);
+  }
+
+  .hero__art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero__phone {
+    flex: none;
+  }
+
+  .hero__phone--main {
+    z-index: 2;
+    width: min(320px, 52vw);
+  }
+
+  .hero__phone--left,
+  .hero__phone--right {
+    z-index: 1;
+    width: min(240px, 40vw);
+  }
+
+  .hero__phone--left {
+    margin-right: -72px;
+    transform: rotate(-8deg) translateY(30px);
+  }
+
+  .hero__phone--right {
+    margin-left: -72px;
+    transform: rotate(8deg) translateY(30px);
+  }
+
+  @media (min-width: 1000px) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+
+    .hero__inner {
+      padding-block: 20px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .hero__phone--left,
+    .hero__phone--right {
+      display: none;
+    }
+
+    .hero__phone--main {
+      width: min(320px, 68vw);
+    }
+  }
+</style>

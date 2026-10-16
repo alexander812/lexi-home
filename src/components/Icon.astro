@@ -1,0 +1,176 @@
+---
+export type IconName =
+  | 'arrow-down'
+  | 'arrow-right'
+  | 'book-open'
+  | 'check'
+  | 'download'
+  | 'file-text'
+  | 'graduation-cap'
+  | 'keyboard'
+  | 'mic'
+  | 'monitor'
+  | 'move-horizontal'
+  | 'palette'
+  | 'play'
+  | 'smartphone'
+  | 'sparkles'
+  | 'trophy';
+
+interface Props {
+  name: IconName;
+  size?: number;
+}
+
+const { name, size = 20 } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    name === 'arrow-down' && (
+      <>
+        <>
+          <path d="M12 5v14" />
+          <path d="m19 12-7 7-7-7" />
+        </>
+      </>
+    )
+  }
+  {
+    name === 'arrow-right' && (
+      <>
+        <>
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </>
+      </>
+    )
+  }
+  {
+    name === 'book-open' && (
+      <>
+        <path d="M12 7v14" />
+        <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3H3Z" />
+      </>
+    )
+  }
+  {name === 'check' && <path d="M20 6 9 17l-5-5" />}
+  {
+    name === 'download' && (
+      <>
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <path d="m7 10 5 5 5-5" />
+        <path d="M12 15V3" />
+      </>
+    )
+  }
+  {
+    name === 'file-text' && (
+      <>
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M10 9H8" />
+        <path d="M16 13H8" />
+        <path d="M16 17H8" />
+      </>
+    )
+  }
+  {
+    name === 'graduation-cap' && (
+      <>
+        <path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0l8.58-3.9Z" />
+        <path d="M22 10v6" />
+        <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+      </>
+    )
+  }
+  {
+    name === 'keyboard' && (
+      <>
+        <rect width="20" height="12" x="2" y="6" rx="2" />
+        <path d="M6 10h.01" />
+        <path d="M10 10h.01" />
+        <path d="M14 10h.01" />
+        <path d="M18 10h.01" />
+        <path d="M8 14h8" />
+      </>
+    )
+  }
+  {
+    name === 'mic' && (
+      <>
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+        <path d="M12 19v3" />
+      </>
+    )
+  }
+  {
+    name === 'monitor' && (
+      <>
+        <rect width="20" height="14" x="2" y="3" rx="2" />
+        <path d="M8 21h8" />
+        <path d="M12 17v4" />
+      </>
+    )
+  }
+  {
+    name === 'move-horizontal' && (
+      <>
+        <path d="m18 8 4 4-4 4" />
+        <path d="m6 8-4 4 4 4" />
+        <path d="M2 12h20" />
+      </>
+    )
+  }
+  {
+    name === 'palette' && (
+      <>
+        <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+        <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+        <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+        <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.83-.44-1.12-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.66h1.99c3.05 0 5.56-2.5 5.56-5.55C22 6.01 17.46 2 12 2Z" />
+      </>
+    )
+  }
+  {name === 'play' && <path d="M7 4v16l13-8Z" fill="currentColor" stroke="none" />}
+  {
+    name === 'smartphone' && (
+      <>
+        <rect width="14" height="20" x="5" y="2" rx="2.5" />
+        <path d="M12 18h.01" />
+      </>
+    )
+  }
+  {
+    name === 'sparkles' && (
+      <>
+        <path d="m12 3-1.9 5.8a2 2 0 0 1-1.28 1.28L3 12l5.82 1.9a2 2 0 0 1 1.28 1.29L12 21l1.9-5.81a2 2 0 0 1 1.28-1.28L21 12l-5.82-1.92a2 2 0 0 1-1.28-1.28Z" />
+      </>
+    )
+  }
+  {
+    name === 'trophy' && (
+      <>
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+        <path d="M4 22h16" />
+        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+        <path d="M18 2H6v7a6 6 0 0 0 12 0Z" />
+      </>
+    )
+  }
+</svg>
