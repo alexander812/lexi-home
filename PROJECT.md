@@ -13,7 +13,7 @@
 
 ## Стек
 
-- Astro 7 (статический вывод, `trailingSlash: 'never'`), Node ≥ 22.12.
+- Astro 7 (статический вывод, `trailingSlash: 'always'` — так URL отдаёт GitHub Pages), Node ≥ 22.12.
 - TypeScript strict (`astro check` + `tsc --noEmit`), ESLint 9 (flat config) + Prettier.
 - `@astrojs/sitemap` — sitemap с alternate-ссылками локалей.
 - `astro:assets` + `sharp` — оптимизация скриншотов (webp, несколько ширин).
@@ -164,10 +164,21 @@ reveal) — в `base.css`.
 
 ## Деплой
 
-Пока не настроен. Вариант по умолчанию — GitHub Pages (как у приложения): workflow собирает
-`npm ci && npm run build` и публикует `dist/` на `lexi.casa` (в `astro.config.mjs` нет `base`,
-поэтому сайт должен жить в корне домена). Если лендинг переезжает на корень `lexi.casa`, веб-приложение
-остаётся на `app.lexi.casa` — ссылки в лендинге уже указывают туда.
+Основной сайт — GitHub Pages, домен `lexi.casa` (рабочая версия: `https://lexi.casa`, `www.lexi.casa`
+редиректится на apex самим GitHub Pages; веб-приложение живёт на `app.lexi.casa` в репозитории `elemental`).
+
+- Workflow `.github/workflows/deploy.yml`: push в `main` (или ручной запуск) → `npm ci` → `npm run i18n` →
+  `npm run build` → публикация `dist` через `upload-pages-artifact` + `deploy-pages`. Node 22.
+- `public/CNAME` содержит `lexi.casa` — домен привязан и в артефакте сборки.
+- URL страниц отдаются со завершающим слэшем (`/`, `/ru/`), поэтому в `astro.config.mjs` стоит
+  `trailingSlash: 'always'`, а `localePath()` возвращает `/ru/`. Проверять сборку локально стоит через
+  `npm run preview` — иначе локальный `/ru` и продовый `/ru/` разойдутся.
+- Pages включён через API (`build_type: workflow`): если репозиторий переезжает или настройки сбрасываются,
+  нужен шаг «Settings → Pages → Source: GitHub Actions».
+- `https_enforced` включается в настройках Pages; включать только после того, как сертификат домена
+  выпущен (`https_certificate.state: approved`), иначе API отвечает «The certificate does not exist yet».
+- Скриншоты приложения лежат в `src/assets/screenshots/` и обязаны быть в git — CI собирает проект из
+  чистого клона (историю с `UNRESOLVED_IMPORT` см. в коммите `fix: скриншоты приложения…`).
 
 ## Следующие шаги
 
