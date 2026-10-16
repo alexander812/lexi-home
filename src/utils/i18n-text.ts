@@ -33,13 +33,13 @@ export function useTranslations(locale: Locale) {
   return (key: TranslationKey): string => t(locale, key);
 }
 
-/** Path of a page inside a locale: '/' for the default locale, '/ru/…' for the others */
+/** Path of a page inside a locale: '/' for the default locale, '/ru/' for the others */
 export function localePath(locale: Locale, path = '/'): string {
   if (locale === defaultLocale) {
     return path;
   }
 
-  return path === '/' ? `/${locale}` : `/${locale}${path}`;
+  return path === '/' ? `/${locale}/` : `/${locale}${path}`;
 }
 
 export { defaultLocale, hreflangMap, type Locale, locales } from '../constants/i18n';

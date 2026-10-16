@@ -7,7 +7,7 @@ const SITE = 'https://lexi.casa';
 
 export default defineConfig({
   site: SITE,
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   compressHTML: true,
   build: { assetsInlineLimit: 0 },
   i18n: {
