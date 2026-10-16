@@ -9,5 +9,5 @@ dist/
 .idea/
 
 # локальные исходники и референсы (не часть сайта)
-screenshots/
-design-ref/
+/screenshots/
+/design-ref/
