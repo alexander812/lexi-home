@@ -44,18 +44,6 @@ const points = [t('download_point_signup'), t('download_point_ads'), t('download
 
     <ul class="options">
       <li class="option" data-reveal>
-        <span class="option__icon">
-          <Icon name="monitor" size={22} />
-        </span>
-        <h3 class="option__title">{t('download_web_title')}</h3>
-        <p class="option__text">{t('download_web_text')}</p>
-        <Button href={APP_URL} target="_blank" rel="noopener" size="l">
-          <Icon slot="icon" name="arrow-right" size={20} />
-          {t('download_web_cta')}
-        </Button>
-      </li>
-
-      <li class="option" data-reveal style="--reveal-delay: 120ms">
         <span class="option__icon option__icon--warning">
           <Icon name="smartphone" size={22} />
         </span>
@@ -66,6 +54,18 @@ const points = [t('download_point_signup'), t('download_point_ads'), t('download
           {t('download_android_cta')}
         </Button>
         <p class="option__note">{t('download_android_note')}</p>
+      </li>
+
+      <li class="option" data-reveal style="--reveal-delay: 120ms">
+        <span class="option__icon">
+          <Icon name="monitor" size={22} />
+        </span>
+        <h3 class="option__title">{t('download_web_title')}</h3>
+        <p class="option__text">{t('download_web_text')}</p>
+        <Button href={APP_URL} target="_blank" rel="noopener" size="l">
+          <Icon slot="icon" name="arrow-right" size={20} />
+          {t('download_web_cta')}
+        </Button>
       </li>
     </ul>
 

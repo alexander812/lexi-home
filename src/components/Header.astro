@@ -1,6 +1,5 @@
 ---
 import Button from './Button.astro';
-import { APP_URL } from '../constants/links';
 import type { Locale } from '../constants/i18n';
 import { localePath, useTranslations } from '../utils/i18n-text';
 
@@ -56,7 +55,7 @@ const languageOptions = [
         }
       </div>
 
-      <Button href={APP_URL} target="_blank" rel="noopener">{t('nav_try')}</Button>
+      <Button href="#download">{t('nav_try')}</Button>
     </div>
   </div>
 </header>
