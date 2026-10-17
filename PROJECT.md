@@ -158,18 +158,24 @@ reveal) — в `base.css`.
 
 ## Android-сборка
 
-Лендинг ссылается на APK из GitHub Releases репозитория `lexi-android` (константа `ANDROID_APK_URL`):
+Лендинг ссылается на APK по постоянному адресу (константа `ANDROID_APK_URL`):
 
 ```
-https://github.com/alexander812/lexi-android/releases/latest/download/lexi-android.apk
+https://lexi.casa/downloads/lexi-android.apk
 ```
+
+Сам файл в git не хранится. Workflow деплоя `.github/workflows/deploy.yml` перед сборкой скачивает
+последний asset `lexi-android.apk` из GitHub Releases репозитория `lexi-android` в
+`public/downloads/lexi-android.apk`; дальше он попадает в `dist` и раздаётся GitHub Pages с того же
+домена, что и лендинг. Это важно для пользователей из России: браузер не ходит напрямую на
+`release-assets.githubusercontent.com`.
 
 При `:app:assembleRelease` в `lexi-android` подписанный APK автоматически создаётся или обновляется
-как asset `lexi-android.apk` в релизе с тегом `v<versionName>-<versionCode>` (например, `v1.5-6`).
-Ссылка `releases/latest/download/...` всегда ведёт на APK из последнего релиза. В git-историю
-`lexi-home` APK больше не попадает.
+как asset в релизе с тегом `v<versionName>-<versionCode>` (например, `v1.5-6`). После загрузки
+`lexi-android` отправляет `repository_dispatch` с типом `android-apk-updated` в `lexi-home`, workflow
+скачивает свежий APK и передеплоит сайт. В git-историю `lexi-home` APK не попадает.
 
-Сам файл в `public/downloads/` не хранится — там остался только `README.md` с указателем.
+В `public/downloads/` лежит только `README.md`; файл `lexi-android.apk` появляется там на этапе CI.
 
 ## Деплой
 

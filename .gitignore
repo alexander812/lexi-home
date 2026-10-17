@@ -11,3 +11,6 @@ dist/
 # локальные исходники и референсы (не часть сайта)
 /screenshots/
 /design-ref/
+
+# APK скачивается в CI из GitHub Releases и не хранится в git
+/public/downloads/lexi-android.apk
