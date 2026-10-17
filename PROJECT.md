@@ -45,7 +45,7 @@ public/
   logo.svg              # эмблема + «Lexi» (полный лок-ап, сейчас не используется)
   favicon.svg, icons/, apple-touch-icon.png
   videos/               # ролики базы знаний приложения + постеры (см. «Видео»)
-  downloads/            # сюда кладётся lexi-android.apk (APK в репозиторий не входит)
+  downloads/            # lexi-android.apk — обновляется релизной сборкой lexi-android
 src/
   assets/screenshots/   # скриншоты приложения для секций (webp на выходе)
   components/
@@ -159,8 +159,14 @@ reveal) — в `base.css`.
 ## Android-сборка
 
 Лендинг ссылается на `/downloads/lexi-android.apk` (константа `ANDROID_APK_URL`).
-Файл в репозиторий не входит — его нужно положить в `public/downloads/lexi-android.apk` (или скачивать
-в CI). Пока файла нет, ссылка ведёт на 404. Рядом лежит `public/downloads/README.md` с напоминанием.
+Файл лежит в `public/downloads/lexi-android.apk` и обновляется автоматически из репозитория
+`lexi-android`: при `:app:assembleRelease` скрипт `scripts/publish-release-apk.sh` копирует подписанный
+APK, коммитит его в `lexi-home` и пушит в `main`. После push workflow деплоит сайт, так что ссылка
+всегда ведёт на последнюю собранную версию. Вручную файл не редактировать.
+
+APK весит около 95 МБ, поэтому каждый релиз добавляет новую версию в историю git. Если репозиторий
+начнёт расти слишком быстро, стоит перейти на GitHub Releases и ссылку вида
+`https://github.com/alexander812/lexi-android/releases/latest/download/lexi-android.apk`.
 
 ## Деплой
 

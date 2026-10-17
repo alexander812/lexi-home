@@ -1,7 +1,10 @@
 # Android APK
 
-Put the release build of the Android app here as `lexi-android.apk`.
+`lexi-android.apk` — подписанный release APK приложения. Лендинг ссылается на него как
+`/downloads/lexi-android.apk`.
 
-The landing links to it as `/downloads/lexi-android.apk`, so the file name must match exactly.
-The APK has to be in the repository (or downloaded during CI) — otherwise it will not appear in the
-built site published on GitHub Pages. See `PROJECT.md`, section «Android-сборка».
+Файл обновляется автоматически из репозитория `lexi-android`: при сборке `:app:assembleRelease`
+скрипт `scripts/publish-release-apk.sh` копирует сюда свежий APK, коммитит его в `lexi-home` и пушит
+в `main`. После push workflow GitHub Actions пересобирает и деплоит сайт.
+
+Вручную файл не редактировать. Подробности — в `PROJECT.md`, раздел «Android-сборка».
