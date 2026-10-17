@@ -1,10 +1,14 @@
 # Android APK
 
-`lexi-android.apk` — подписанный release APK приложения. Лендинг ссылается на него как
-`/downloads/lexi-android.apk`.
+APK больше не хранится в этом репозитории. Он публикуется как asset GitHub Releases в репозитории
+`lexi-android`:
 
-Файл обновляется автоматически из репозитория `lexi-android`: при сборке `:app:assembleRelease`
-скрипт `scripts/publish-release-apk.sh` копирует сюда свежий APK, коммитит его в `lexi-home` и пушит
-в `main`. После push workflow GitHub Actions пересобирает и деплоит сайт.
+```
+https://github.com/alexander812/lexi-android/releases/latest/download/lexi-android.apk
+```
 
-Вручную файл не редактировать. Подробности — в `PROJECT.md`, раздел «Android-сборка».
+Лендинг ссылается на этот адрес через `ANDROID_APK_URL` в `src/constants/links.ts`. Ссылка
+`releases/latest/download/...` всегда ведёт на APK из последнего релиза.
+
+Загрузка выполняется автоматически при сборке `:app:assembleRelease` в `lexi-android`.
+Подробности — в `PROJECT.md`, раздел «Android-сборка».

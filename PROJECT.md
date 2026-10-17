@@ -45,7 +45,7 @@ public/
   logo.svg              # эмблема + «Lexi» (полный лок-ап, сейчас не используется)
   favicon.svg, icons/, apple-touch-icon.png
   videos/               # ролики базы знаний приложения + постеры (см. «Видео»)
-  downloads/            # lexi-android.apk — обновляется релизной сборкой lexi-android
+  downloads/README.md   # указатель на APK в GitHub Releases (сам файл в репозитории не хранится)
 src/
   assets/screenshots/   # скриншоты приложения для секций (webp на выходе)
   components/
@@ -158,15 +158,18 @@ reveal) — в `base.css`.
 
 ## Android-сборка
 
-Лендинг ссылается на `/downloads/lexi-android.apk` (константа `ANDROID_APK_URL`).
-Файл лежит в `public/downloads/lexi-android.apk` и обновляется автоматически из репозитория
-`lexi-android`: при `:app:assembleRelease` скрипт `scripts/publish-release-apk.sh` копирует подписанный
-APK, коммитит его в `lexi-home` и пушит в `main`. После push workflow деплоит сайт, так что ссылка
-всегда ведёт на последнюю собранную версию. Вручную файл не редактировать.
+Лендинг ссылается на APK из GitHub Releases репозитория `lexi-android` (константа `ANDROID_APK_URL`):
 
-APK весит около 95 МБ, поэтому каждый релиз добавляет новую версию в историю git. Если репозиторий
-начнёт расти слишком быстро, стоит перейти на GitHub Releases и ссылку вида
-`https://github.com/alexander812/lexi-android/releases/latest/download/lexi-android.apk`.
+```
+https://github.com/alexander812/lexi-android/releases/latest/download/lexi-android.apk
+```
+
+При `:app:assembleRelease` в `lexi-android` подписанный APK автоматически создаётся или обновляется
+как asset `lexi-android.apk` в релизе с тегом `v<versionName>-<versionCode>` (например, `v1.5-6`).
+Ссылка `releases/latest/download/...` всегда ведёт на APK из последнего релиза. В git-историю
+`lexi-home` APK больше не попадает.
+
+Сам файл в `public/downloads/` не хранится — там остался только `README.md` с указателем.
 
 ## Деплой
 
