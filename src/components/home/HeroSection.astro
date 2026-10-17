@@ -120,7 +120,7 @@ const screenWidths = [240, 360, 480, 640];
 
   .hero__title {
     margin-top: 22px;
-    font-size: clamp(40px, 6.4vw, 88px);
+    font-size: clamp(40px, 6.1vw, 80px);
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.04em;
@@ -201,9 +201,35 @@ const screenWidths = [240, 360, 480, 640];
     .hero__inner {
       padding-block: 20px;
     }
+
+    .hero__phone--main {
+      width: clamp(240px, 24vw, 320px);
+    }
+
+    .hero__phone--left,
+    .hero__phone--right {
+      width: clamp(180px, 18vw, 240px);
+    }
+
+    .hero__phone--left {
+      margin-right: clamp(-72px, -5.4vw, -54px);
+    }
+
+    .hero__phone--right {
+      margin-left: clamp(-72px, -5.4vw, -54px);
+    }
   }
 
   @media (max-width: 700px) {
+    .hero__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .hero__actions :global(.btn) {
+      width: 100%;
+    }
+
     .hero__phone--left,
     .hero__phone--right {
       display: none;

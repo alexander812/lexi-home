@@ -121,6 +121,12 @@ ol {
   margin-top: clamp(40px, 5vw, 64px);
 }
 
+@media (max-width: 700px) {
+  .section__cta .btn {
+    width: 100%;
+  }
+}
+
 /* Device frame --------------------------------------------------- */
 
 .media-frame {
