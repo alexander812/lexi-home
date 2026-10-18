@@ -61,6 +61,7 @@ src/
   layouts/BaseLayout.astro
   pages/[...locale]/index.astro  # главная: / (en) и /ru
   pages/404.astro       # 404 (на английском, ведёт на главную)
+  scripts/analytics.ts           # PostHog EU: pageview + клики по APK/веб-версии
   scripts/scroll-effects.ts      # reveal-анимации + состояние шапки
   styles/tokens.css     # цвета/радиусы/типографика (тёмная тема ui-kit)
   styles/base.css       # reset, контейнер, типографика, .media-frame, reveal
@@ -155,6 +156,22 @@ reveal) — в `base.css`.
 Шапка и футер собирают лок-ап из `public/emblem.svg` + текста «Lexi» (Inter 700): так размер и
 вертикальный ритм совпадают с приложением. `public/logo.svg` (эмблема + «Lexi» в кривых) оставлен
 для соц-превью и других задач, где нужен цельный SVG.
+
+## Аналитика
+
+PostHog Cloud EU (`https://eu.i.posthog.com`) — общий проект с приложением `elemental`, чтобы
+считать воронку «клик на лендинге → заход в веб-версию» по общему анонимному `distinct_id`
+(cookie на `.lexi.casa` + localStorage). Без `PUBLIC_POSTHOG_KEY` скрипт молчит.
+
+- `src/scripts/analytics.ts` — ленивая загрузка `posthog-js` после простоя, `landing_viewed` на
+  загрузку страницы, делегированный обработчик `[data-analytics-event]`.
+- События: `landing_viewed`, `landing_apk_clicked`, `landing_web_clicked`; свойства `placement`
+  (`download_section` | `footer`), `locale`, `target`, `surface=landing`.
+- Разметка: `data-analytics-event` / `data-analytics-placement` на кнопках секции «Скачать»
+  (`DownloadSection.astro`) и ссылках футера (`Footer.astro`); `Button.astro` прокидывает их в `<a>`.
+- Приватность: autocapture, session replay и pageleave выключены, `respect_dnt`.
+- Ключ: `PUBLIC_POSTHOG_KEY` в `.env` локально и в GitHub Secrets → workflow «Build landing».
+  Необязательный `PUBLIC_POSTHOG_HOST` (по умолчанию EU).
 
 ## Android-сборка
 

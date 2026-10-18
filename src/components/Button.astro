@@ -6,16 +6,36 @@ interface Props {
   target?: string;
   rel?: string;
   download?: string | boolean;
+  analyticsEvent?: string;
+  analyticsPlacement?: string;
   icon?: string;
   class?: string;
 }
 
-const { href, variant = 'primary', size = 'm', target, rel, download, class: className } = Astro.props;
+const {
+  href,
+  variant = 'primary',
+  size = 'm',
+  target,
+  rel,
+  download,
+  analyticsEvent,
+  analyticsPlacement,
+  class: className,
+} = Astro.props;
 
 const classes = ['btn', `btn--${variant}`, `btn--${size}`, className].filter(Boolean).join(' ');
 ---
 
-<a class={classes} href={href} target={target} rel={rel} download={download}>
+<a
+  class={classes}
+  href={href}
+  target={target}
+  rel={rel}
+  download={download}
+  data-analytics-event={analyticsEvent}
+  data-analytics-placement={analyticsPlacement}
+>
   <slot name="icon" />
   <slot />
   <slot name="trailing" />

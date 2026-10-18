@@ -49,7 +49,14 @@ const points = [t('download_point_signup'), t('download_point_ads'), t('download
         </span>
         <h3 class="option__title">{t('download_android_title')}</h3>
         <p class="option__text">{t('download_android_text')}</p>
-        <Button href={ANDROID_APK_URL} download size="l" variant="warning">
+        <Button
+          href={ANDROID_APK_URL}
+          download
+          size="l"
+          variant="warning"
+          analyticsEvent="landing_apk_clicked"
+          analyticsPlacement="download_section"
+        >
           <Icon slot="icon" name="download" size={20} />
           {t('download_android_cta')}
         </Button>
@@ -62,7 +69,14 @@ const points = [t('download_point_signup'), t('download_point_ads'), t('download
         </span>
         <h3 class="option__title">{t('download_web_title')}</h3>
         <p class="option__text">{t('download_web_text')}</p>
-        <Button href={APP_URL} target="_blank" rel="noopener" size="l">
+        <Button
+          href={APP_URL}
+          target="_blank"
+          rel="noopener"
+          size="l"
+          analyticsEvent="landing_web_clicked"
+          analyticsPlacement="download_section"
+        >
           <Icon slot="icon" name="arrow-right" size={20} />
           {t('download_web_cta')}
         </Button>

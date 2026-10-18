@@ -10,9 +10,28 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 
-const appLinks = [
-  { href: APP_URL, label: t('footer_web'), external: true },
-  { href: ANDROID_APK_URL, label: t('footer_android'), download: true },
+const appLinks: Array<{
+  href: string;
+  label: string;
+  external?: boolean;
+  download?: boolean;
+  analyticsEvent?: string;
+  analyticsPlacement?: string;
+}> = [
+  {
+    href: APP_URL,
+    label: t('footer_web'),
+    external: true,
+    analyticsEvent: 'landing_web_clicked',
+    analyticsPlacement: 'footer',
+  },
+  {
+    href: ANDROID_APK_URL,
+    label: t('footer_android'),
+    download: true,
+    analyticsEvent: 'landing_apk_clicked',
+    analyticsPlacement: 'footer',
+  },
   { href: '#videos', label: t('footer_videos') },
   { href: '#download', label: t('footer_download') },
 ];
@@ -44,6 +63,8 @@ const languageLinks = [
               target={link.external ? '_blank' : undefined}
               rel={link.external ? 'noopener' : undefined}
               download={link.download ? true : undefined}
+              data-analytics-event={link.analyticsEvent}
+              data-analytics-placement={link.analyticsPlacement}
             >
               {link.label}
             </a>
