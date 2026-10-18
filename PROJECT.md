@@ -61,7 +61,7 @@ src/
   layouts/BaseLayout.astro
   pages/[...locale]/index.astro  # главная: / (en) и /ru
   pages/404.astro       # 404 (на английском, ведёт на главную)
-  scripts/analytics.ts           # PostHog EU: pageview + клики по APK/веб-версии
+  scripts/analytics.ts           # Amplitude EU: landing_viewed + клики по APK/веб-версии
   scripts/scroll-effects.ts      # reveal-анимации + состояние шапки
   styles/tokens.css     # цвета/радиусы/типографика (тёмная тема ui-kit)
   styles/base.css       # reset, контейнер, типографика, .media-frame, reveal
@@ -159,19 +159,21 @@ reveal) — в `base.css`.
 
 ## Аналитика
 
-PostHog Cloud EU (`https://eu.i.posthog.com`) — общий проект с приложением `elemental`, чтобы
-считать воронку «клик на лендинге → заход в веб-версию» по общему анонимному `distinct_id`
-(cookie на `.lexi.casa` + localStorage). Без `PUBLIC_POSTHOG_KEY` скрипт молчит.
+Amplitude Free — общий проект с приложением `elemental`, чтобы считать воронку «клик на лендинге →
+заход в веб-версию» по общему анонимному `device_id` (cookie `lexi_analytics_id` на `.lexi.casa` +
+localStorage). Регион задаётся `PUBLIC_AMPLITUDE_SERVER_ZONE`: по умолчанию `US`, для EU — `EU`.
+Без `PUBLIC_AMPLITUDE_KEY` скрипт молчит.
 
-- `src/scripts/analytics.ts` — ленивая загрузка `posthog-js` после простоя, `landing_viewed` на
-  загрузку страницы, делегированный обработчик `[data-analytics-event]`.
+- `src/scripts/analytics.ts` — ленивая загрузка `@amplitude/analytics-browser` после простоя,
+  `landing_viewed` на загрузку страницы, делегированный обработчик `[data-analytics-event]`.
 - События: `landing_viewed`, `landing_apk_clicked`, `landing_web_clicked`; свойства `placement`
   (`download_section` | `footer`), `locale`, `target`, `surface=landing`.
 - Разметка: `data-analytics-event` / `data-analytics-placement` на кнопках секции «Скачать»
   (`DownloadSection.astro`) и ссылках футера (`Footer.astro`); `Button.astro` прокидывает их в `<a>`.
-- Приватность: autocapture, session replay и pageleave выключены, `respect_dnt`.
-- Ключ: `PUBLIC_POSTHOG_KEY` в `.env` локально и в GitHub Secrets → workflow «Build landing».
-  Необязательный `PUBLIC_POSTHOG_HOST` (по умолчанию EU).
+- Приватность: `autocapture: false` (без pageview, sessions, attribution, form/file tracking),
+  session replay в Analytics SDK нет, IP-адрес в события не добавляется, при `Do Not Track` скрипт молчит.
+- Ключ: `PUBLIC_AMPLITUDE_KEY` в `.env` локально и в GitHub Secrets → workflow «Build landing».
+  Регион: `PUBLIC_AMPLITUDE_SERVER_ZONE=US|EU` (по умолчанию US).
 
 ## Android-сборка
 

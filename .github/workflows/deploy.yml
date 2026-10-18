@@ -51,7 +51,8 @@ jobs:
       - name: Build landing
         run: npm run build
         env:
-          PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_AMPLITUDE_KEY: ${{ secrets.PUBLIC_AMPLITUDE_KEY }}
+          PUBLIC_AMPLITUDE_SERVER_ZONE: ${{ vars.PUBLIC_AMPLITUDE_SERVER_ZONE }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

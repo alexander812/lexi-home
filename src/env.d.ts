@@ -1,8 +1,8 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-  readonly PUBLIC_POSTHOG_KEY?: string;
-  readonly PUBLIC_POSTHOG_HOST?: string;
+  readonly PUBLIC_AMPLITUDE_KEY?: string;
+  readonly PUBLIC_AMPLITUDE_SERVER_ZONE?: 'US' | 'EU';
 }
 
 interface ImportMeta {
