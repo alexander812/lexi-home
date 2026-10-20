@@ -8,7 +8,7 @@ const locale = defaultLocale;
 const t = useTranslations(locale);
 ---
 
-<BaseLayout locale={locale} title={t('notfound_title')}>
+<BaseLayout locale={locale} title={t('notfound_title')} description={t('notfound_text')} noindex>
   <section class="notfound container">
     <img class="notfound__logo" src="/emblem.svg" alt="Lexi" width="512" height="512" />
     <h1 class="title">{t('notfound_title')}</h1>

@@ -1,5 +1,7 @@
 ---
-import { ANDROID_APK_URL, APP_URL } from '../constants/links';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { ANDROID_APK_URL, APP_URL, SUPPORT_BOT_URL } from '../constants/links';
 import type { Locale } from '../constants/i18n';
 import { localePath, useTranslations } from '../utils/i18n-text';
 
@@ -33,6 +35,7 @@ const appLinks: Array<{
     analyticsPlacement: 'footer',
   },
   { href: '#videos', label: t('footer_videos') },
+  { href: '#faq', label: t('footer_faq') },
   { href: '#download', label: t('footer_download') },
 ];
 
@@ -50,6 +53,18 @@ const languageLinks = [
         <span class="footer__wordmark">Lexi</span>
       </div>
       <p class="footer__tagline">{t('footer_tagline')}</p>
+      <Button
+        href={SUPPORT_BOT_URL}
+        variant="secondary"
+        target="_blank"
+        rel="noopener"
+        analyticsEvent="landing_support_clicked"
+        analyticsPlacement="footer"
+        class="footer__support"
+      >
+        <Icon slot="icon" name="telegram" size={18} />
+        {t('footer_support')}
+      </Button>
     </div>
 
     <div class="footer__cols">
@@ -131,6 +146,10 @@ const languageLinks = [
   .footer__tagline {
     color: var(--text-secondary);
     font-size: 15px;
+  }
+
+  .footer__brand :global(.footer__support) {
+    align-self: flex-start;
   }
 
   .footer__cols {

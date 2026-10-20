@@ -2,21 +2,27 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CoursesSection from '../../components/home/CoursesSection.astro';
 import DownloadSection from '../../components/home/DownloadSection.astro';
+import FaqSection from '../../components/home/FaqSection.astro';
 import HeroSection from '../../components/home/HeroSection.astro';
 import TasksSection from '../../components/home/TasksSection.astro';
 import VideosSection from '../../components/home/VideosSection.astro';
+import { getFaqItems } from '../../constants/faq';
 import { getLocaleFromPath } from '../../utils/i18n-text';
 import { getStaticPaths } from '../../utils/i18n-routes';
+import { buildStructuredData } from '../../utils/seo';
 
 const locale = getLocaleFromPath(Astro.url.pathname);
+const site = Astro.site ?? new URL('https://lexi.casa');
+const structuredData = buildStructuredData(locale, site, getFaqItems(locale));
 
 export { getStaticPaths };
 ---
 
-<BaseLayout locale={locale}>
+<BaseLayout locale={locale} structuredData={structuredData}>
   <HeroSection locale={locale} />
   <CoursesSection locale={locale} />
   <TasksSection locale={locale} />
   <VideosSection locale={locale} />
+  <FaqSection locale={locale} />
   <DownloadSection locale={locale} />
 </BaseLayout>

@@ -32,6 +32,7 @@ npm run check        # astro check (типы и шаблоны)
 npm run type            # tsc --noEmit
 npm run lint         # eslint src
 npm run i18n         # проверка синхронности словарей en/ru
+npm run og           # пересобрать OG-картинки en/ru
 npm run format       # prettier
 ```
 
@@ -40,10 +41,13 @@ npm run format       # prettier
 ```
 astro.config.mjs        # site, i18n (en по умолчанию, ru в /ru), sitemap
 scripts/check-i18n.mjs  # сверка ключей в словарях (en — эталон)
+scripts/generate-og.mjs # OG-картинки 1200×630 для en/ru (npm run og)
 public/
   emblem.svg            # эмблема (A + 文) без фона — шапка и футер
   logo.svg              # эмблема + «Lexi» (полный лок-ап, сейчас не используется)
   favicon.svg, icons/, apple-touch-icon.png
+  robots.txt            # Allow всех страниц + Sitemap
+  og/                   # og:image для en/ru (генерируются скриптом)
   videos/               # ролики базы знаний приложения + постеры (см. «Видео»)
   downloads/README.md   # указатель на APK в GitHub Releases (сам файл в репозитории не хранится)
 src/
@@ -54,19 +58,21 @@ src/
     Icon.astro          # набор inline-иконок по имени
     Header.astro        # «плавающая» шапка: лого, навигация, переключатель EN/RU, «Попробовать»
     Footer.astro        # футер: бренд, ссылки приложения, выбор языка
-    home/               # секции лендинга (Hero, Courses, Tasks, Videos, Download)
+    home/               # секции лендинга (Hero, Courses, Tasks, Videos, FAQ, Download)
+  constants/faq.ts      # вопросы/ответы для FAQ-секции и FAQPage
   constants/i18n.ts     # локали (en, ru), локаль по умолчанию, hreflang
   constants/links.ts    # APP_URL, ANDROID_APK_URL
   i18n/en.json, ru.json # тексты (плоские ключи + ICU-подобные строки без переменных)
   layouts/BaseLayout.astro
   pages/[...locale]/index.astro  # главная: / (en) и /ru
-  pages/404.astro       # 404 (на английском, ведёт на главную)
+  pages/404.astro       # 404 (на английском, ведёт на главную, noindex)
   scripts/analytics.ts           # Amplitude EU: landing_viewed + клики по APK/веб-версии
   scripts/scroll-effects.ts      # reveal-анимации + состояние шапки
   styles/tokens.css     # цвета/радиусы/типографика (тёмная тема ui-kit)
   styles/base.css       # reset, контейнер, типографика, .media-frame, reveal
   utils/i18n-text.ts    # t(), useTranslations(), localePath()
   utils/i18n-routes.ts  # getStaticPaths для /[...locale]
+  utils/seo.ts          # OG-метаданные и JSON-LD (WebSite, SoftwareApplication, FAQPage, VideoObject)
 ```
 
 ## Страницы и секции
@@ -79,9 +85,10 @@ src/
 | 2   | Курсы и уроки    | `courses`  | 4 карточки: курсы по уровням, свои уроки и задания, задания из текста, прогресс и награды                                                          |
 | 3   | Механика заданий | `tasks`    | 5 шагов (текст → свайпы → произношение → ввод → тест), два экрана приложения                                                                       |
 | 4   | Видео уроки      | `videos`   | 4 вертикальных плеера (постер + play, видео грузится только по клику)                                                                              |
-| 5   | Скачать          | `download` | веб-версия `app.lexi.casa` и Android APK; фон — коллаж из тем оформления                                                                           |
+| 5   | Вопросы и ответы | `faq`      | 7 раскрывающихся вопросов о приложении, цене, языках, офлайне и данных; те же вопросы уходят в JSON-LD `FAQPage`                                   |
+| 6   | Скачать          | `download` | веб-версия `app.lexi.casa` и Android APK; фон — коллаж из тем оформления                                                                           |
 
-Под секциями 2–4 — общая кнопка «Скачать приложение» (`common_cta_download`), ведущая на `#download`.
+Под секциями 2–5 — общая кнопка «Скачать приложение» (`common_cta_download`), ведущая на `#download`.
 Все тексты берутся из словарей; структура повторяется в обеих локалях.
 
 ## Локализация
@@ -89,7 +96,7 @@ src/
 - `en` — по умолчанию и без префикса (`/`), `ru` — с префиксом (`/ru`). Набор локалей — `src/constants/i18n.ts`.
 - Тексты: `src/i18n/en.json` (эталон) и `src/i18n/ru.json`; в разметке — `const t = useTranslations(locale)`
   и `t('key')`. Ключи плоские, с префиксом по секции (`hero_*`, `courses_*`, `tasks_*`, `videos_*`,
-  `download_*`, `footer_*`, `alt_*`, `meta_*`).
+  `faq_*`, `download_*`, `footer_*`, `alt_*`, `meta_*`, `schema_*`).
 - Ссылка на страницу локали — `localePath(locale)` из `utils/i18n-text.ts`.
 - `npm run i18n` падает, если в словарях разное число ключей. Новые ключи добавляются в оба файла сразу;
   тексты без перевода в одной из локалей лучше не оставлять (проверка ловит только наличие ключа).
@@ -157,6 +164,23 @@ reveal) — в `base.css`.
 вертикальный ритм совпадают с приложением. `public/logo.svg` (эмблема + «Lexi» в кривых) оставлен
 для соц-превью и других задач, где нужен цельный SVG.
 
+## SEO
+
+- `title`/`description` в словарях (`meta_*`) нацелены на запросы «тренажёр для запоминания слов»,
+  «flashcards / vocabulary app», «выучить английские слова»; заголовок H1 при этом остаётся
+  маркетинговым, а ключевые слова — в лиде и FAQ.
+- `BaseLayout` отдаёт canonical, `hreflang` для en/ru + `x-default`, `robots` (`index, follow`),
+  OG/Twitter-метаданные с картинками 1200×630 (`og/lexi-en.png`, `og/lexi-ru.png`).
+- JSON-LD (`utils/seo.ts`): `Organization`, `WebSite`, `WebPage`, `SoftwareApplication` (бесплатное
+  приложение, web + Android, featureList), `FAQPage` и `VideoObject` для четырёх роликов.
+  FAQ-разметка строится из тех же `faq_*` ключей, что и видимая секция.
+- `public/robots.txt` разрешает обход и указывает на `sitemap-index.xml`; 404 отдаётся с `noindex`.
+- OG-картинки пересобираются командой `npm run og` (sharp + системный шрифт, PNG коммитятся).
+- Для запуска органики после деплоя: добавить сайт в Google Search Console и Яндекс.Вебмастер,
+  отправить sitemap, проверить `hreflang` и структурированные данные валидаторами Google/Yandex.
+  Дальше — отдельные страницы под поисковые интенты (например, «как учить английские слова»,
+  «приложение для запоминания слов») со ссылками на лендинг; сейчас сайт одностраничный.
+
 ## Аналитика
 
 Amplitude Free — общий проект с приложением `elemental`, чтобы считать воронку «клик на лендинге →
@@ -217,7 +241,8 @@ https://lexi.casa/downloads/lexi-android.apk
 ## Следующие шаги
 
 - Workflow деплоя (GitHub Pages) + домен: `lexi.casa`.
-- OG-картинка 1200×630 (сейчас в `og:image` отдаётся `icons/icon-512.png`).
+- Google Search Console и Яндекс.Вебмастер: подтвердить домен, отправить `sitemap-index.xml`.
+- Контентные страницы под long-tail запросы (тренажёр английских слов, как учить слова и т.п.).
 - Google Play (когда появится) — третья карточка в секции «Скачать».
 - Английская озвучка видео: ролики базы знаний записаны на русском.
 - Аналитика (если понадобится) — отдельным интеграционным скриптом, без влияния на LCP.

@@ -14,6 +14,7 @@
     "type": "tsc --noEmit",
     "lint": "eslint src --quiet",
     "i18n": "node scripts/check-i18n.mjs",
+    "og": "node scripts/generate-og.mjs",
     "format": "prettier --write ."
   },
   "dependencies": {

@@ -37,7 +37,7 @@ const videos = [
               <source src={`/videos/${video.base}.mp4`} type="video/mp4" />
             </video>
 
-            <button class="video__play" type="button" aria-label={t('videos_play')}>
+            <button class="video__play" type="button" aria-label={`${t('videos_play')}: ${video.title}`}>
               <Icon name="play" size={22} />
             </button>
           </div>

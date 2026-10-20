@@ -21,6 +21,19 @@ export default defineConfig({
         defaultLocale,
         locales: hreflangMap,
       },
+      serialize: item => {
+        if (!item.links || item.links.some(link => link.lang === 'x-default')) {
+          return item;
+        }
+
+        const defaultVersion = item.links.find(link => link.lang === defaultLocale);
+
+        if (!defaultVersion) {
+          return item;
+        }
+
+        return { ...item, links: [...item.links, { lang: 'x-default', url: defaultVersion.url }] };
+      },
     }),
   ],
 });
