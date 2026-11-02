@@ -12,6 +12,7 @@ const t = useTranslations(locale);
 
 const navItems = [
   { href: '#courses', label: t('nav_courses') },
+  ...(locale === 'ru' ? [{ href: '#poliglot', label: t('nav_poliglot') }] : []),
   { href: '#tasks', label: t('nav_tasks') },
   { href: '#videos', label: t('nav_videos') },
   { href: '#download', label: t('nav_download') },

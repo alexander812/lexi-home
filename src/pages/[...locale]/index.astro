@@ -4,6 +4,7 @@ import CoursesSection from '../../components/home/CoursesSection.astro';
 import DownloadSection from '../../components/home/DownloadSection.astro';
 import FaqSection from '../../components/home/FaqSection.astro';
 import HeroSection from '../../components/home/HeroSection.astro';
+import PoliglotSection from '../../components/home/PoliglotSection.astro';
 import TasksSection from '../../components/home/TasksSection.astro';
 import VideosSection from '../../components/home/VideosSection.astro';
 import { getFaqItems } from '../../constants/faq';
@@ -21,6 +22,7 @@ export { getStaticPaths };
 <BaseLayout locale={locale} structuredData={structuredData}>
   <HeroSection locale={locale} />
   <CoursesSection locale={locale} />
+  {locale === 'ru' && <PoliglotSection locale={locale} />}
   <TasksSection locale={locale} />
   <VideosSection locale={locale} />
   <FaqSection locale={locale} />

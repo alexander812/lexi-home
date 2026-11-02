@@ -1,0 +1,390 @@
+---
+import { Image } from 'astro:assets';
+
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import type { IconName } from '../Icon.astro';
+import Section from '../Section.astro';
+import poliglotScreen from '../../assets/screenshots/poliglot-test.jpg';
+import { APP_URL } from '../../constants/links';
+import type { Locale } from '../../constants/i18n';
+import { useTranslations } from '../../utils/i18n-text';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const features: { icon: IconName; title: string; text: string }[] = [
+  { icon: 'graduation-cap', title: t('poliglot_feature_1_title'), text: t('poliglot_feature_1_text') },
+  { icon: 'sparkles', title: t('poliglot_feature_2_title'), text: t('poliglot_feature_2_text') },
+  { icon: 'file-text', title: t('poliglot_feature_3_title'), text: t('poliglot_feature_3_text') },
+  { icon: 'book-open', title: t('poliglot_feature_4_title'), text: t('poliglot_feature_4_text') },
+];
+
+const matrixColumns = [t('poliglot_matrix_question'), t('poliglot_matrix_statement'), t('poliglot_matrix_negative')];
+
+const matrixRows = [
+  { label: t('poliglot_matrix_future'), cells: ['Will I love?', 'I will love', 'I will not love'] },
+  { label: t('poliglot_matrix_present'), cells: ['Do I love?', 'I love', 'I don’t love'] },
+  { label: t('poliglot_matrix_past'), cells: ['Did I love?', 'I loved', 'I didn’t love'] },
+];
+
+const phoneWidths = [140, 200, 280];
+const phoneSizes = '(max-width: 960px) 150px, 180px';
+---
+
+<Section id="poliglot" class="poliglot">
+  <div class="poliglot__grid">
+    <div class="poliglot__content">
+      <p class="eyebrow" data-reveal>
+        <Icon name="sparkles" size={14} />
+        {t('poliglot_eyebrow')}
+      </p>
+
+      <h2 class="poliglot__title" data-reveal style="--reveal-delay: 80ms">{t('poliglot_title')}</h2>
+
+      <p class="poliglot__lead" data-reveal style="--reveal-delay: 140ms">{t('poliglot_lead')}</p>
+
+      <ul class="features">
+        {
+          features.map((feature, index) => (
+            <li class="feature" data-reveal style={`--reveal-delay: ${180 + index * 70}ms`}>
+              <span class="feature__icon">
+                <Icon name={feature.icon} size={18} />
+              </span>
+              <div class="feature__body">
+                <h3 class="feature__title">{feature.title}</h3>
+                <p class="feature__text">{feature.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="poliglot__actions" data-reveal style="--reveal-delay: 420ms">
+        <Button
+          href={APP_URL}
+          target="_blank"
+          rel="noopener"
+          size="l"
+          analyticsEvent="landing_web_clicked"
+          analyticsPlacement="poliglot_section"
+        >
+          <Icon slot="icon" name="arrow-right" size={20} />
+          {t('poliglot_cta')}
+        </Button>
+        <p class="poliglot__note">{t('poliglot_note')}</p>
+      </div>
+    </div>
+
+    <div class="poliglot__visual" data-reveal style="--reveal-delay: 160ms">
+      <div class="matrix">
+        <div class="matrix__head">
+          <span class="matrix__badge">3 × 3</span>
+          <div>
+            <h3 class="matrix__title">{t('poliglot_matrix_title')}</h3>
+            <p class="matrix__hint">{t('poliglot_matrix_hint')}</p>
+          </div>
+        </div>
+
+        <table class="matrix__table" aria-label={t('poliglot_matrix_title')}>
+          <thead>
+            <tr>
+              <th class="matrix__corner" scope="col" aria-hidden="true"></th>
+              {matrixColumns.map(column => <th scope="col">{column}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              matrixRows.map(row => (
+                <tr>
+                  <th scope="row">{row.label}</th>
+                  {row.cells.map(cell => (
+                    <td>{cell}</td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="media-frame poliglot__phone">
+        <Image src={poliglotScreen} alt={t('alt_poliglot')} widths={phoneWidths} sizes={phoneSizes} />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .poliglot {
+    overflow: hidden;
+  }
+
+  .poliglot::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: -10%;
+    width: min(760px, 80vw);
+    height: min(760px, 80vw);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(71, 99, 240, 0.2), transparent 65%);
+    pointer-events: none;
+  }
+
+  .poliglot__grid {
+    position: relative;
+    display: grid;
+    gap: clamp(44px, 5vw, 72px);
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .poliglot__content {
+    position: relative;
+  }
+
+  .poliglot__title {
+    margin-top: 22px;
+    font-size: clamp(32px, 4.5vw, 58px);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .poliglot__lead {
+    max-width: 580px;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    font-size: clamp(16px, 1.25vw, 19px);
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .features {
+    display: grid;
+    gap: 20px 28px;
+    margin-top: 34px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature {
+    display: flex;
+    gap: 12px;
+  }
+
+  .feature__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-m);
+    background: var(--card-bg);
+    color: var(--accent-hover);
+  }
+
+  .feature__title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .feature__text {
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .poliglot__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    margin-top: 36px;
+  }
+
+  .poliglot__note {
+    max-width: 270px;
+    color: var(--text-tertiary);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .poliglot__visual {
+    position: relative;
+  }
+
+  .matrix {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    padding: clamp(18px, 2.2vw, 26px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(155deg, rgba(71, 99, 240, 0.22), rgba(15, 15, 17, 0.92) 48%, rgba(15, 15, 17, 0.98));
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.5);
+  }
+
+  .matrix::before {
+    content: '';
+    position: absolute;
+    top: -140px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(71, 99, 240, 0.35), transparent 65%);
+    pointer-events: none;
+  }
+
+  .matrix__head {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .matrix__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    padding: 6px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .matrix__title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .matrix__hint {
+    margin-top: 3px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .matrix__table {
+    position: relative;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 4px;
+    table-layout: fixed;
+  }
+
+  .matrix__corner {
+    width: 20%;
+  }
+
+  .matrix__table thead th {
+    padding: 4px 8px 8px;
+    color: var(--text-tertiary);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .matrix__table tbody th {
+    width: 20%;
+    padding: 9px 8px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  .matrix__table tbody td {
+    padding: 9px 8px;
+    border-radius: var(--radius-s);
+    background: rgba(246, 247, 255, 0.06);
+    color: var(--text);
+    font-size: clamp(11px, 1vw, 13px);
+    font-weight: 500;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+  }
+
+  .matrix__table tbody tr:nth-child(2) td {
+    border: 1px solid rgba(71, 99, 240, 0.35);
+    background: rgba(71, 99, 240, 0.16);
+  }
+
+  .poliglot__phone {
+    position: relative;
+    z-index: 2;
+    width: clamp(150px, 13vw, 180px);
+    margin: -6px 20px 0 auto;
+    transform: rotate(3deg);
+    transform-origin: bottom right;
+  }
+
+  @media (max-width: 959px) {
+    .poliglot__phone {
+      width: 150px;
+      margin: 18px auto 0;
+      transform-origin: center;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .poliglot__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .features {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .poliglot__actions :global(.btn) {
+      width: 100%;
+    }
+
+    .poliglot__note {
+      max-width: none;
+    }
+
+    .matrix__table {
+      border-spacing: 3px;
+    }
+
+    .matrix__table thead th {
+      padding: 3px 4px 6px;
+      font-size: 9px;
+      letter-spacing: 0;
+      overflow-wrap: break-word;
+    }
+
+    .matrix__table tbody th {
+      padding: 8px 4px;
+      font-size: 10px;
+    }
+
+    .matrix__table tbody td {
+      padding: 8px 6px;
+      font-size: 11px;
+    }
+  }
+</style>
