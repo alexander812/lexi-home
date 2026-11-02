@@ -48,6 +48,7 @@ const languageOptions = [
             <a
               class:list={['header__lang-item', { 'is-active': option.locale === locale }]}
               href={localePath(option.locale)}
+              data-locale-choice={option.locale}
               aria-current={option.locale === locale ? 'true' : undefined}
             >
               {option.label}

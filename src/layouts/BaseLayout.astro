@@ -38,6 +38,60 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData).repla
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => {
+        const STORAGE_KEY = 'lexi.locale';
+        const SUPPORTED = ['en', 'ru'];
+
+        const readPreference = () => {
+          try {
+            const stored = window.localStorage.getItem(STORAGE_KEY);
+
+            return SUPPORTED.includes(stored) ? stored : null;
+          } catch {
+            return null;
+          }
+        };
+
+        const detectLocale = () => {
+          const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+
+          for (const language of languages) {
+            const base = language?.toLowerCase().split('-')[0];
+
+            if (SUPPORTED.includes(base)) {
+              return base;
+            }
+          }
+
+          return 'en';
+        };
+
+        document.addEventListener('click', event => {
+          const target = event.target;
+          const link = target instanceof Element ? target.closest('[data-locale-choice]') : null;
+          const choice = link instanceof HTMLElement ? link.dataset.localeChoice : null;
+
+          if (!choice || !SUPPORTED.includes(choice)) {
+            return;
+          }
+
+          try {
+            window.localStorage.setItem(STORAGE_KEY, choice);
+          } catch {
+            // Storage may be unavailable (private mode); the URL still carries the choice.
+          }
+        });
+
+        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+          return;
+        }
+
+        if ((readPreference() ?? detectLocale()) === 'ru') {
+          window.location.replace(`/ru/${window.location.search}${window.location.hash}`);
+        }
+      })();
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <meta name="robots" content={robots} />

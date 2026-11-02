@@ -40,8 +40,8 @@ const appLinks: Array<{
 ];
 
 const languageLinks = [
-  { href: localePath('en'), label: 'English', active: locale === 'en' },
-  { href: localePath('ru'), label: 'Русский', active: locale === 'ru' },
+  { locale: 'en' as Locale, href: localePath('en'), label: 'English', active: locale === 'en' },
+  { locale: 'ru' as Locale, href: localePath('ru'), label: 'Русский', active: locale === 'ru' },
 ];
 ---
 
@@ -91,7 +91,12 @@ const languageLinks = [
         <h3 class="footer__col-title">{t('footer_lang_title')}</h3>
         {
           languageLinks.map(link => (
-            <a class="footer__link" href={link.href} aria-current={link.active ? 'true' : undefined}>
+            <a
+              class="footer__link"
+              href={link.href}
+              data-locale-choice={link.locale}
+              aria-current={link.active ? 'true' : undefined}
+            >
               {link.label}
             </a>
           ))
