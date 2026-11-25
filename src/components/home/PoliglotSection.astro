@@ -76,6 +76,21 @@ const phoneSizes = '(max-width: 960px) 150px, 180px';
           <Icon slot="icon" name="arrow-right" size={20} />
           {t('poliglot_cta')}
         </Button>
+
+        <Button
+          href="/videos/poliglot.mp4"
+          target="_blank"
+          rel="noopener"
+          variant="secondary"
+          size="l"
+          class="poliglot__video-trigger"
+          analyticsEvent="landing_poliglot_video_clicked"
+          analyticsPlacement="poliglot_section"
+        >
+          <Icon slot="icon" name="play" size={16} />
+          {t('poliglot_video_cta')}
+        </Button>
+
         <p class="poliglot__note">{t('poliglot_note')}</p>
       </div>
     </div>
@@ -117,7 +132,79 @@ const phoneSizes = '(max-width: 960px) 150px, 180px';
       </div>
     </div>
   </div>
+
+  <dialog class="video-dialog" data-poliglot-video aria-labelledby="poliglot-video-title">
+    <div class="video-dialog__frame">
+      <div class="video-dialog__head">
+        <div>
+          <p class="video-dialog__eyebrow">{t('poliglot_eyebrow')}</p>
+          <h3 class="video-dialog__title" id="poliglot-video-title">{t('poliglot_video_title')}</h3>
+        </div>
+
+        <button
+          class="video-dialog__close"
+          type="button"
+          aria-label={t('poliglot_video_close')}
+          data-poliglot-video-close
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+
+      <video
+        class="video-dialog__video"
+        poster="/videos/poliglot.jpg"
+        preload="none"
+        playsinline
+        controls
+        data-poliglot-video-el
+      >
+        <source src="/videos/poliglot.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <p class="video-dialog__note">{t('poliglot_video_note')}</p>
+  </dialog>
 </Section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('#poliglot');
+
+  if (section) {
+    const dialog = section.querySelector<HTMLDialogElement>('[data-poliglot-video]');
+    const video = section.querySelector<HTMLVideoElement>('[data-poliglot-video-el]');
+    const trigger = section.querySelector<HTMLAnchorElement>('.poliglot__video-trigger');
+    const closeButton = section.querySelector<HTMLButtonElement>('[data-poliglot-video-close]');
+
+    if (dialog && video && trigger && closeButton) {
+      const close = () => {
+        video.pause();
+        dialog.close();
+      };
+
+      trigger.addEventListener('click', event => {
+        event.preventDefault();
+        dialog.showModal();
+
+        const playback = video.play();
+
+        if (playback) {
+          playback.catch(() => {});
+        }
+      });
+
+      closeButton.addEventListener('click', close);
+
+      dialog.addEventListener('click', event => {
+        if (event.target === dialog) {
+          close();
+        }
+      });
+
+      dialog.addEventListener('close', () => video.pause());
+    }
+  }
+</script>
 
 <style>
   .poliglot {
@@ -208,12 +295,12 @@ const phoneSizes = '(max-width: 960px) 150px, 180px';
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 14px 20px;
+    gap: 14px 12px;
     margin-top: 36px;
   }
 
   .poliglot__note {
-    max-width: 270px;
+    max-width: 360px;
     color: var(--text-tertiary);
     font-size: 13px;
     line-height: 1.45;
@@ -337,6 +424,96 @@ const phoneSizes = '(max-width: 960px) 150px, 180px';
     margin: -6px 20px 0 auto;
     transform: rotate(3deg);
     transform-origin: bottom right;
+  }
+
+  .video-dialog {
+    width: fit-content;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-main);
+    overflow: visible;
+  }
+
+  .video-dialog::backdrop {
+    background: rgba(5, 5, 5, 0.86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .video-dialog__frame {
+    width: fit-content;
+    max-width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--surface-1);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+  }
+
+  .video-dialog__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 8px 14px;
+  }
+
+  .video-dialog__video {
+    display: block;
+    width: auto;
+    height: min(66vh, 700px);
+    max-width: calc(100vw - 48px);
+    border-radius: var(--radius-l);
+    background: #000;
+  }
+
+  .video-dialog__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 24px;
+    line-height: 1;
+    transition: background-color 0.2s var(--ease-out);
+  }
+
+  .video-dialog__close:hover {
+    background: var(--control-bg-hover);
+  }
+
+  .video-dialog__eyebrow {
+    color: var(--accent-hover);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .video-dialog__title {
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .video-dialog__note {
+    max-width: 420px;
+    margin: 12px auto 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
   }
 
   @media (max-width: 959px) {
